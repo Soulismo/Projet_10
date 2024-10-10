@@ -125,7 +125,7 @@ paths:
         "404":
           description: Account not found
 
-  /{accountId}/transactions:
+  /accounts/{accountId}/transactions:
     get:
       security:
         - Bearer: []
@@ -152,7 +152,38 @@ paths:
           description: Unauthorized
         "404":
           description: Transactions not found
-
+  /user/current-month-transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Retrieve current month transactions grouped by account
+      description: API for retrieving all transactions for the current month, grouped by account.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "Transactions retrieved successfully"
+              body:
+                type: array
+                items:
+                  $ref: "#/definitions/AccountTransactions"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
   /transactions/{transactionId}:
     patch:
       security:
@@ -296,3 +327,17 @@ definitions:
       category:
         type: string
         description: The new category of the transaction.
+
+  AccountTransactions:
+    type: object
+    properties:
+      accountId:
+        type: integer
+        description: The unique identifier for the account.
+      accountName:
+        type: string
+        description: The name of the account.
+      transactions:
+        type: array
+        items:
+          $ref: "#/definitions/Transaction"
