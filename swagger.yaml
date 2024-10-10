@@ -152,14 +152,25 @@ paths:
           description: Unauthorized
         "404":
           description: Transactions not found
-  /user/current-month-transactions:
+  /user/transactions:
     get:
       security:
         - Bearer: []
       tags:
         - Transactions Module
-      summary: Retrieve current month transactions grouped by account
-      description: API for retrieving all transactions for the current month, grouped by account.
+      summary: Retrieve user transactions
+      description: API for retrieving user transactions with option to filter for current month and group by account
+      parameters:
+        - in: query
+          name: month
+          type: string
+          enum: [current]
+          description: When set to 'current', returns transactions for the current month
+        - in: query
+          name: groupBy
+          type: string
+          enum: [account]
+          description: When set to 'account', groups transactions by account
       produces:
         - application/json
       responses:
